@@ -1,0 +1,7 @@
+.ui-header .ui-title { margin-left: 1em; margin-right: 1em; }
+.ui-header .ui-title { text-overflow: clip;   }
+
+ol, ul { margin-left: 10px; padding-left: 10px; }
+
+.btnLeft { position: fixed; top: 50%; left: 0px; }
+.btnRight { position: fixed; top: 50%; right: 0px; }

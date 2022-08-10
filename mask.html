@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>마스크 사용지침</title>
+	<!-- 제이쿼리 모바일, 제이쿼리 라이브러리 파일 선언 -->
+	<link rel="stylesheet" href="themes/COVID-19.min.css" />
+	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+	<!-- 사용자 정의 자바스크립트, css 파일 선언 -->
+	<link rel="stylesheet" href="covid19.css"/>
+
+	<!-- 마스크 페이지 설명 변경 -->
+	<script>
+		$(document).ready( function() {
+			// 먼저 숨겨둠
+			$('#mask2').hide(0);
+			$('#mask3').hide(0);
+			$('#mask4').hide(0);
+			$('#mask5').hide(0);
+			$('#mask6').hide(0);
+			
+			// 페이지별 버튼 작동
+			$('#next1').click(function() {
+				$('#mask1').slideUp(600);
+				$('#mask2').slideDown(600);
+			});
+			
+			$('#before2').click(function() {
+				$('#mask1').slideDown(600);
+				$('#mask2').slideUp(600);
+			});
+			
+			$('#next2').click(function() {
+				$('#mask2').slideUp(600);
+				$('#mask3').slideDown(600);
+			});
+			
+			$('#before3').click(function() {
+				$('#mask2').slideDown(600);
+				$('#mask3').slideUp(600);
+			});
+			
+			$('#next3').click(function() {
+				$('#mask3').slideUp(600);
+				$('#mask4').slideDown(600);
+			});
+			
+			$('#before4').click(function() {
+				$('#mask3').slideDown(600);
+				$('#mask4').slideUp(600);
+			});
+			
+			$('#next4').click(function() {
+				$('#mask4').slideUp(600);
+				$('#mask5').slideDown(600);
+			});
+			
+			$('#before5').click(function() {
+				$('#mask4').slideDown(600);
+				$('#mask5').slideUp(600);
+			});
+			
+			$('#next5').click(function() {
+				$('#mask5').slideUp(600);
+				$('#mask6').slideDown(600);
+			});
+			
+			$('#before6').click(function() {
+				$('#mask5').slideDown(600);
+				$('#mask6').slideUp(600);
+			});
+		});
+	</script>
+</head>
+<body>
+	<div data-role="dialog" data-theme="d">
+		<div data-role="header" data-position="fixed">
+			<a href="#" data-icon="arrow-l" data-direction="reverse" data-rel="back">이전</a>	
+			<h1>마스크 사용 지침</h1>
+		</div>
+		
+		<!-- mask1 -->
+		<div data-role="contents" id="mask1">
+			<img src="files/마스크사용지침1.jpg" width="100%" />
+			<a href="#" id="next1" class="btnRight"><input type="image" src="files/btnNext.png" width="25px" data-role="button"></a>
+		</div>
+		
+		<!-- mask2 -->
+		<div data-role="contents" id="mask2">
+			<a href="#" id="before2" class="btnLeft"><input type="image" src="files/btnBefore.png" width="25px" data-role="button"></a>
+			<a href="#" id="next2" class="btnRight"><input type="image" src="files/btnNext.png" width="25px" data-role="button"></a>
+			<div class="ui-body ui-body-a">
+				<h3>[일반원칙]</h3>
+				<img src="files/마스크사용지침2.jpg" width="100%" />
+				<ol>
+					<li>코로나19 행동 수칙’을 준수하고, 휴대폰 등 개인물품 위생관리, 사회적 거리 확보, 실내 환기 등 개인위생 관리를 철저히 한다.</li>
+					<li>감염 의심자와 접촉 등 감염 위험성이 있는 경우, 기저질환이 있는 고위험군은 보건용 마스크 사용이 권고된다.</li>
+					<li>감염 우려가 높지 않거나, 보건용 마스크가 없는 상황에선 기침·재채기 등으로 인한 타인의 침방울이 직접 닿지 않도록 면마스크(정전기필터 교체포함)를 사용하는 것이 도움이 된다.</li>
+					<li>혼잡하지 않은 야외, 가정 내, 개별 공간은 마스크 착용이 필요하지 않다.</li>
+				</ol>
+			</div>
+
+		</div>
+		
+		<!-- mask3 -->
+		<div data-role="contents" id="mask3">
+			<a href="#" id="before3" class="btnLeft"><input type="image" src="files/btnBefore.png" width="25px" data-role="button"></a>
+			<a href="#" id="next3" class="btnRight"><input type="image" src="files/btnNext.png" width="25px" data-role="button"></a>
+			<div class="ui-body ui-body-a">
+				<h3>[마스크 종류에 따른 차이점]</h3>
+				<img src="files/마스크.jpg" width="100%" />
+			</div>
+			<div class="ui-body ui-body-a">
+				<h3>[KF94 이상 보건용 마스크 착용이 필요한 경우]</h3>
+				<p>- 코로나19 의심자를 돌보는 경우 </p>
+			</div>
+		</div>
+		
+		<!-- mask4 -->
+		<div data-role="contents" id="mask4">
+			<a href="#" id="before4" class="btnLeft"><input type="image" src="files/btnBefore.png" width="25px" data-role="button"></a>
+			<a href="#" id="next4" class="btnRight"><input type="image" src="files/btnNext.png" width="25px" data-role="button"></a>
+			<div class="ui-body ui-body-a">
+				<h3>[KF80 이상 보건용 마스크 착용이 필요한 경우]</h3>
+				<ol>
+					<li>의료기관을 방문하는 경우</li>
+					<li>기침‧콧물 등 호흡기 증상이 있는 경우</li>
+					<li>감염과 전파 위험이 높은 직업군 : 대중교통 운전기사, 판매원, 역무원, 우체국 집배원, 택배기사, 대형건물 관리원 및 고객을 직접 응대해야 하는 직업 종사자</li>
+					<li>건강 취약계층, 기저 질환자 등이 대중교통‧군중모임 등 환기가 잘 안 되는 공간에서 2m 이내에 다른 사람과 접촉하는 경우</li>
+				</ol>
+				<p>
+					* 건강 취약계층 : 노인, 어린이, 임산부, 만성질환자 등 <br />
+					* 기저 질환자 : 만성 폐질환, 당뇨, 만성 신질환, 만성 간질환, 만성심혈관질환, 혈액암, 항암치료 암환자,  면역억제제 복용 중인 환자 등
+				</p>
+			</div>
+		</div>
+		
+		<!-- mask5 -->
+		<div data-role="contents" id="mask5">
+			<a href="#" id="before5" class="btnLeft"><input type="image" src="files/btnBefore.png" width="25px" data-role="button"></a>
+			<a href="#" id="next5" class="btnRight"><input type="image" src="files/btnNext.png" width="25px" data-role="button"></a>
+			<div class="ui-body ui-body-a">
+			<h3>[마스크 사용 시 주의사항]</h3>
+				<img src="files/마스크사용지침3.jpg" width="100%" />
+				<ol>
+					<li>마스크를 착용하기 전 손을 비누와 물로 씻거나 알코올 손 소독제로 닦는다.</li>
+					<li>입과 코를 완전히 가리도록 마스크를 착용한 후 얼굴과 마스크 사이에 틈이 없는지 확인한다.</li>
+					<li>마스크에 수건이나 휴지로 덧대지 않는다.</li>
+					<li>마스크를 착용하는 동안 마스크를 만지지 않도록 주의한다.</li>
+					<li>마스크를 만졌다면 손을 비누와 물로 씻는 것을 권장한다.</li>
+				</ol>
+			</div>
+		</div>
+		
+		<!-- mask6 -->
+		<div data-role="contents" id="mask6">
+			<div class="ui-body ui-body-a">
+				<h3>[보건용 마스크 재사용할 경우 고려 사항]</h3>
+				<ol>
+					<li>오염 우려가 적은 곳에서 일시적으로 사용한 경우 동일인에 한해서 재사용이 가능하다.</li>
+					<li>환기가 잘되는 깨끗한 곳에 보관한 후 재사용할 것을 권고한다.</li>
+					<li>재사용하면 마스크 정전기 필터 성능이 떨어지기 때문에 △헤어드라이기를 이용한 건조 △전자레인지 또는 알코올 소독 △세탁은 권장하지 않는다.</li>
+				</ol>
+			</div>
+			<a href="#" id="before6" class="btnLeft"><input type="image" src="files/btnBefore.png" width="25px" data-role="button"></a>
+
+			<div class="ui-body ui-body-a">
+				<h3>[정전기필터 장착 면마스크 사용할 경우 고려사항]</h3>
+				<ol>
+					<li>정전기 필터는 찢어질 수 있기 때문에 장착 시 주의한다.</li>
+					<li>최대한 면마스크 크기에 맞는 정전기필터를 사용해서 틈새를 없앤다.</li>
+					<li>정전기필터는 수분에 노출되면 기능이 떨어질 수 있어서 세탁하면 안 된다.</li>
+					<li>면마스크가 젖으면 새 정전기필터로 교체해야 한다.</li>
+				</ol>
+			</div>
+		</div>
+		<div data-role="footer" data-position="fixed">
+			<h4>COVID-19 Information</h4>
+		</div>
+	</div>
+</body>
+</html>

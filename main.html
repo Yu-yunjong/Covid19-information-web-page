@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>COVID-19</title>
+		
+		<!-- 제이쿼리 모바일, 제이쿼리 라이브러리 파일 선언 -->
+		<link rel="stylesheet" href="themes/COVID-19.min.css" />
+		<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		
+		<!-- 차트 이용시 필요한.. -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="src/jquery.jqplot.js"></script>
+		<script type="text/javascript" src="src/plugins/jqplot.dateAxisRenderer.js"></script>
+		<script type="text/javascript" src="src/plugins/jqplot.logAxisRenderer.js"></script>
+		<script type="text/javascript" src="src/plugins/jqplot.canvasTextRenderer.js"></script>
+		<script type="text/javascript" src="src/plugins/jqplot.canvasAxisTickRenderer.js"></script>
+		<script type="text/javascript" src="src/plugins/jqplot.highlighter.js"></script>
+		<link rel="stylesheet" type="text/css" href="src/jquery.jqplot.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/smoothness/jquery-ui.css" />-->
+		
+		<!-- 사용자 정의 자바스크립트, css 파일 선언 -->
+		<script src="worldJSON.js"></script>
+		<script src="login.js"></script>
+		<link rel="stylesheet" href="covid19.css"/>
+		
+		<!-- 메인페이지 사진 변경 -->
+		<script>
+			$(document).ready( function() {
+				$('#img2').hide(0);
+				$('#img1').click(function() {
+					$('#img1').hide(600);
+					$('#img2').show(600);
+				});
+				$('#img2').click(function() {
+					$('#img2').hide(600, function(){
+						$('#img1').show(600);
+					});
+				});
+			});
+		</script>
+		
+	</head>
+	<body>
+		<!-- hidden page(login 패널) -->
+		<div data-role="page" id="home" data-theme="d">
+			<div data-role="panel" id="login" data-display="overlay" data-theme="d">
+		        <form>
+		            <h3>로그인</h3>
+		            <label for="l_user_id">아이디:</label>
+		            <input name="l_user_id" id="l_user_id" type="text" value="" data-mini="true" data-clear-btn="true">
+		            <label for="password">비밀번호:</label>
+		            <input name="password" id="password" type="password" value="" data-mini="true" data-clear-btn="true">
+		            <div class="ui-grid-a">
+		                <div class="ui-block-a"><a href="#" data-role="button" data-rel="close">취소</a></div>
+		                <div class="ui-block-b"><a href="#" id="login_btn" data-role="button">로그인</a></div>
+		                <div class="ui-block-b"><a href="#signup" data-role="button" data-rel="close">회원가입</a></div>
+		            </div>
+		        </form>
+			</div>
+			
+			<!-- hidden page(회원가입 패널) -->
+			<div data-role="panel" id="signup" data-display="overlay" data-theme="d" data-position="right">
+		        <form>
+		            <h3>회원가입</h3>
+		            <label for="user_id">아이디:</label>
+		            <input name="user_id" id="user_id" type="text" value="" data-mini="true">
+		            <a href="#" id="chk_id" data-role="button">아이디 중복체크</a>
+		            <label for="user_password">비밀번호:</label>
+		            <input name="user_password" id="user_password" type="password" value="" data-mini="true" data-clear-btn="true">
+		            <label for="chk_user_password">비밀번호 확인:</label>
+		            <input name="chk_user_password" id="chk_user_password" type="password" value="" data-mini="true" data-clear-btn="true">
+		            <label for="user_name">이름:</label>
+		            <input name="user_name" id="user_name" type="text" value="" data-mini="true" data-clear-btn="true">
+		            <label for="user_phone">전화번호:</label>
+		            <input name="user_phone" id="user_phone" type="tel" value="" data-mini="true" data-clear-btn="true" placeholder="010-xxxx-xxxx" pattern="(010)-[0-9]{4}-[0-9]{4}">
+					<label for="gender">성별</label>
+					<select name="gender" id="gender" data-role="slider">
+						<option value="male">남자</option>
+						<option value="female">여자</option>
+					</select>
+
+		            <div class="ui-grid-a">
+		                <div class="ui-block-a"><a href="#login" data-role="button" data-rel="close">취소</a></div>
+		                <div class="ui-block-b"><a href="#" id="signup_btn" data-role="button">가입</a></div>
+		            </div>
+		        </form>
+			</div>
+			
+			<!-- 회원정보 조회 및 수정 페이지 -->
+			<div data-role="panel" id="editinfo" data-display="overlay" data-theme="d">
+		        <form>
+		            <h3>회원정보 조회 및 수정</h3>
+		            <label for="info_user_id">아이디:</label>
+		            <input name="info_user_id" id="info_user_id" type="text" value="" data-mini="true" disabled="disabled">
+		            <label for="info_user_password">비밀번호:</label>
+		            <input name="info_user_password" id="info_user_password" type="password" value="" data-mini="true" data-clear-btn="true">
+		            <label for="info_chk_user_password">비밀번호 확인:</label>
+		            <input name="info_chk_user_password" id="info_chk_user_password" type="password" value="" data-mini="true" data-clear-btn="true">
+		            <label for="info_user_name">이름:</label>
+		            <input name="info_user_name" id="info_user_name" type="text" value="" data-mini="true" data-clear-btn="true">
+		            <label for="info_user_phone">전화번호:</label>
+		            <input name="info_user_phone" id="info_user_phone" type="tel" value="" data-mini="true" data-clear-btn="true" placeholder="010-xxxx-xxxx" pattern="(010)-[0-9]{4}-[0-9]{4}">
+					<label for="info_user_gender">성별</label>
+		            <input name="info_user_gender" id="info_user_gender" type="text" value="" data-mini="true" disabled="disabled">
+
+		            <div class="ui-grid-a">
+		                <div class="ui-block-a"><a href="#" data-role="button" data-rel="close">닫기</a></div>
+		                <div class="ui-block-b"><a href="#" id="editinfo_btn" data-role="button">변경</a></div>
+		                <div class="ui-block-b"><a href="#" id="drop_btn" data-role="button" data-rel="close">회원 탈퇴</a></div>
+		            </div>
+		        </form>
+			</div>
+			
+			<!-- 메인페이지 -->
+			<div data-role="header">
+				<a href="#login" data-icon="user" id="login1">로그인</a>	
+				<h1>COVID-19</h1>
+				<a href="#" data-icon="power" id="logout_btn">로그아웃</a>	
+			</div>
+
+			<div data-role="content">
+				<div style="text-align : center;">
+					<img id="img1" src="files/covid19.jpg" width="300px" />
+					<img id="img2" src="files/covid19-1.jpg" width="300px" />
+				</div>
+				<ul data-role="listview" data-inset="true">
+					<li><a href="#page1" data-transition="flip">코로나19(COVID-19)란?</a></li>
+					<li><a href="#page2" data-transition="flow">전파경로 및 예방법</a></li>
+					<li><a href="#dialog" data-rel="dialog">증상 및 치료</a></li>
+					<li><a href="#page4-1" data-rel="dialog">검사방법</a></li>
+					<li><a href="mask.html" data-ajax="false"><span class="ui-li-count">hot</span>마스크 사용 지침</a></li>
+					<li><a href="#worldCovid19" data-transition="slide"><span class="ui-li-count">new</span>전세계 감염 현황</a></li>
+				</ul>
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<h1>COVID-19 Information</h1>
+			</div>
+		</div>
+		</div>
+		
+		<!-- action sheet(sub 메뉴) -->
+		<div data-role="dialog" id="dialog">
+			<div data-role="content">
+				<a href="#" data-rel="back"><input data-rel="back" type="image" src="files/btnClose.png" width="25px" data-role="button"></a>
+				<h3>증상 및 치료</h3>
+				<a href="#page3-1" data-role="button" data-rel="dialog">잠복기 및 증상</a>
+				<a href="#page3-2" data-role="button" data-rel="dialog">합병증</a>
+				<a href="#page3-3" data-role="button" data-rel="dialog">증상으로 본 유사질환 구분법</a>
+				<a href="#page3-4" data-role="button" data-rel="dialog">치료</a>
+			</div>
+		</div>
+		
+		<!-- page1 -->
+		<div data-role="page" id="page1">
+			<div data-role="header">
+				<a href="#" data-rel="back" data-icon="arrow-l" data-direction="reverse">이전</a>	
+				<h1>Covid19란?</h1>
+			</div>
+			<div data-role="content">
+				<div data-role="collapsible-set">
+					<div data-role="collapsible" data-collapsed="false">
+						<h3>코로나바이러스감염증-19(코로나19)란?</h3>
+						<p>
+							2019년 12월 중국 우한에서 처음 발생한 이후 중국 전역과 전 세계로 확산된 새로운 유형의 코로나바이러스(SARS-CoV-2)에 의한 급성 호흡기 
+							감염질환으로, 사람과 동물 모두 감염되는 인수공통전염병이다. 
+						</p>
+						<p>
+							최초 발생 원인과 전파 경로는 정확하게 밝혀지지 않았으며, 2020년 1월부터 
+							중국에서 외부로 퍼지기 시작해 3월 말까지 일부 국가/지역을 제외한 지구상 대부분의 나라와 모든 대륙으로 확산되며 많은 감염자와 사망자를 기록했다.
+						</p>
+						<p>
+							세계보건기구(WHO, World Health Organization)는 2020년 1월 31일 - 국제적 공중보건 비상사태를 선포, 2월 28일 부로 코로나19의 
+							전 세계 위험도를 '매우 높음'으로 격상하였으며, 3월 11일 코로나19가 범유행전염병임을 선언했다.
+						</p>
+					</div>
+					<div data-role="collapsible">
+						<h3>명칭</h3>
+						<p>
+							WHO에서 제네바 현지 시각으로 2020년 2월 11일, 공식 명칭을 COVID-19(<ins><b>Co</b></ins>rona<ins><b>vi</b></ins>rus 
+							<ins><b>D</b></ins>isease 20<ins><b>19</b></ins>)로 확정했다. 한국에서는 코로나바이러스감염증-19로 번역하여 사용중이며, 
+							너무 길기 때문에 '코로나19'라고도 부른다.
+						</p>
+						<p>
+							확산 초기에는 확실하게 정해진 이름이 없었기 때문에 발병 지역으로 의심되는 중국의 '우한'과 감염 증상인 '폐렴'을 더해서 '우한 폐렴'이라는 명칭을 
+							사용하기도 했으나, '우한 폐렴'이라는 말이 널리 사용되어서 해당 지역의 이미지에 계속 남는 편견이 생길 수 있는 우려에 따라 점차 '우한 폐렴'보다는 
+							'코로나 바이러스', '코로나19' 등으로 불리고 있다.
+						</p>
+						<p>
+							또한, 코로나19는 기존에 존재하던 코로나바이러스(SARS-CoV)의 변종인 SARS-CoV-2이기 때문에, '신종코로나'라고도 
+							불리기도 한다.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<h1>COVID-19 Information</h1>
+			</div>
+		</div>
+		
+			<!-- page2 -->
+			<div data-role="page" id="page2">
+				<div data-role="header">
+					<a href="#" data-rel="back" data-icon="arrow-l" data-direction="reverse">이전</a>	
+					<h1>전파경로 및 예방법</h1>
+				</div>
+				<div data-role="content">	
+					<div data-role="tabs">
+						<div data-role="navbar">
+						    <ul>
+						      <li><a href="#tab1">전파경로</a></li>
+						      <li><a href="#tab2">예방법</a></li>
+						      <li><a href="#tab3">행동수칙</a></li>
+						    </ul>
+						</div>
+						<div id="tab1">
+						    <h4>현재까지는 비말, 접촉을 통한 전파로 알려짐</h4>
+							<p>
+								1. 기침이나 재채기로 인한 호흡기 비말 등<br />
+								2. 오염된 물건을 만진 뒤 눈, 코, 입을 만짐<br />
+								3. 대/소변을 통해서도 전염됨
+							</p>
+							<img src="files/root.jpg" width="100%" />
+							<video src="files/vidio.mp4" width="100%" controls="controls" preload="auto" poster="files/root.jpg"></video>
+						</div>
+						<div id="tab2">
+						    <h4>비누를 이용하여 물에 30초 이상 꼼꼼히 자주 손 씻기</h4>
+						    <ul>
+						    	<li>평소 손 씻기를 생활화</li>
+						    	<li>외출 후나 사람이 많이 모이는 장소를 다녀온 후에는 반드시 손 씻기</li>
+						    	<li>기침이나 재채기 후에는 꼭 손 씻기</li>
+						    </ul>
+						    <br />
+							<h4>기침 등 호흡기 증상이 있을 경우 반드시 기침예절 준수</h4>
+							<ul>
+								<li>특히, 의료기관 방문 시 마스크 착용 필수</li>
+								<li>사람이 많이  모이는 장소 방문 시 마스크 착용 필수</li>
+								<li>마스크가 없다면, 기침이나 재채기 시 옷소매로 입과 코를 가리기</li>
+							</ul>
+							<h4>눈, 코, 입 만지지 않기</h4>
+
+							<h4>중국 여행 후 14일 이내 발열 또는 호흡기 증상(기침, 인후통 등), 폐렴이 발생한 경우</h4>
+							<ul>
+								<li>보건소, 콜센터(지역번호+120 또는 1339)로 문의</li>
+								<li>선별 진료소에서 우선 진료받기</li>
+								<li>의료진에게 반드시 해외여행력 알리기</li>
+							</ul>
+						</div>
+						<div id="tab3">
+							<img src="files/코로나예방.gif" width="100%" />
+						</div>
+					</div>
+				</div>
+				<div data-role="footer" data-position="fixed">
+					<h4>COVID-19 Information</h4>
+				</div>
+			</div>
+			
+			<!-- page3-1 -->
+			<div data-role="page" id="page3-1" >
+				<div data-role="header" >
+					<h1>증상 및 치료</h1>
+				</div>
+				<div data-role="content" >
+					<!-- 잠복기 -->
+					<div class="ui-bar ui-bar-a">잠복기</div><br/>
+					<div class="ui-body ui-body-a">
+
+						<p>1일 ~ 14일 사이로, 평균 4~7일정도이다.</p>
+					</div><br/>
+					
+					<!-- 증상 -->
+					<div class="ui-bar ui-bar-a">증상</div><br/>
+					<div class="ui-body ui-body-a">
+						<h3>무증상</h3>
+						<p>아무런 증상이 없는 경우도 발생한다.</p>
+					</div><br/>
+					<div class="ui-body ui-body-a">
+						<h3>발열, 호흡기 증상</h3>
+						<p>합병증 없이 발열, 호흡기 증상만 발생한다.</p>
+					</div><br/>
+				</div>
+			</div>
+			
+			<!-- page3-2 -->
+			<div data-role="page" id="page3-2" >
+				<div data-role="header" >
+					<h1>증상 및 치료</h1>
+				</div>
+				<div data-role="content" >
+					<!-- 증상 -->
+					<div class="ui-bar ui-bar-a">증상</div><br/>
+					<div class="ui-body ui-body-a">
+						<h3>합병증</h3>
+						<table class="ui-responsive ui-shadow table-stripe" width="100%" >
+							<head>
+								<th width="30%">발생위치</th>
+								<th>증상</th>
+							</head>
+							<body>
+								<tr>
+									<td>폐</td>
+									<td>
+										- 폐포에 염증이 발생하여 산소 유입이 감소한다.<br />
+										- 경증/중증 폐렴<br />
+										- 급성 호흡곤란 증후군<br />
+										- 폐혈증 쇼크
+									</td>
+								</tr>
+									<td>간, 신장</td>
+									<td>면역체계가 과부하되어 중증 손상을 입는다.</td>
+								<tr>
+									<td>장</td>
+									<td>부검 결과 하복부에까지 코로나19가 전이되는 경우가 많으며, 20% 이상의 환자에서 설사가 보고된다.</td>
+								</tr>
+								<tr>
+									<td>뇌</td>
+									<td>뇌졸증, 뇌염, 정신착란이 발생한다.</td>
+								</tr>
+								<tr>
+									<td>눈</td>
+									<td>중증 환자일 경우 결막염 증세가 있는 경우가 많다.</td>
+								</tr>
+								<tr>
+									<td>코</td>
+									<td>냄새를 맡지 못하는 경우가 많다.</td>
+								</tr>
+								<tr>
+									<td>심장 및 혈액</td>
+									<td>
+										혈액이 응고되어 심혈관질환 또는 심장마비가 일어나는 경우가 많다. 또한, 혈액 응고로 인한 혈액순환장애로 
+										인해 손발이 붓는 현상이 보고된다.
+									</td>
+								</tr>
+							</body>
+						</table>
+					</div><br/>
+				</div>
+			</div>
+			
+			<!-- page3-3 -->
+			<div data-role="page" id="page3-3" >
+				<div data-role="header" >
+					<h1>유사질환 구분법</h1>
+				</div>
+				<div data-role="content" >
+					<img src="files/구별법.jpg" width="100%" />
+				</div>
+			</div>
+			
+			<!-- page3-4 -->
+			<div data-role="page" id="page3-4" >
+				<div data-role="header" >
+					<h1>증상 및 치료</h1>
+				</div>
+				<div data-role="content" >
+					<div class="ui-bar ui-bar-a">치료</div><br/>
+					<div class="ui-body ui-body-a">
+						<p>아직 백신이나 치료제는 없음.</p>
+						<p>
+							코로나 바이러스는 RNA형 바이러스로, 조금만 다른 형태가 되어도 새로운 바이러스로 변하고 다른 동물도 함께 전염된다. <br />
+							이러한 특성 때문에 일정 부분 효과가 있는 정도의 치료제 개발은 가능하더라도 완벽하게 듣는 백신의 개발은 불가능하며, 
+							바이러스가 알아서 다른 바이러스로 변이되어 사라지거나 독성이 극히 약해지는것 이외에는 박멸할 수 없다.
+						</p>
+					</div><br/>
+					<div class="ui-body ui-body-a">
+						<p>
+							병원에서는 환자의 증상에 따라 증상을 완화시키는 대중치료(수액 보충, 해열제 등 보존적 치료)를 진행하고 있다.
+						</p>
+					</div><br/>
+				</div>
+			</div>
+			
+			<!-- page4-1 -->
+			<div data-role="page" id="page4-1" >
+				<div data-role="header" >
+					<h1>검사 대상 및 검사방법</h1>
+				</div>
+				<div data-role="content" >
+					<div class="ui-bar ui-bar-a">검사 대상</div><br/>
+					<div class="ui-body ui-body-a">
+						<h3>조사 대상 유증상자</h3>
+						<p>
+							<ol>
+								<li>의사의 소견에 따라 원인미상폐렴 등 코로나19가 의심되는 자</li>
+								<li>해외 방문력이 있으며 귀국 후 14일 이내에 발열(37.5℃ 이상) 또는 호흡기증상(기침, 호흡곤란 등)이 나타난 자</li>
+							</ol>
+						</p>
+					</div><br/>			
+					<div class="ui-body ui-body-a">
+						<h3>의사환자</h3>
+						<p>확진환자와 접촉한 후 14일 이내에 발열(37.5℃ 이상) 또는 호흡기증상(기침, 호흡곤란 등)이 나타난 자</p>	
+					</div><br/>
+				</div>
+				<div data-role="footer">
+					<a href="#" data-rel="back" data-direction="reverse">이전</a>
+					<a href="#page4-2" data-rel="dialog" data-transition="slide" class="ui-btn-right">다음</a>
+				</div>
+			</div>
+				
+			<!-- page4-2 -->
+			<div data-role="page" id="page4-2" >
+				<div data-role="header" >
+					<h1>검사 대상 및 검사방법</h1>
+				</div>
+				<div data-role="content" >
+					<div class="ui-bar ui-bar-a">검사 방법</div><br/>
+					<div class="ui-body ui-body-a">
+						<h3>선별진료소 방문 및 검사</h3>
+						<ul>
+							<li>의사환자일 경우, 선별진료소(보건소 또는 의료기관)의 격리공간 또는 독립된 공간으로 이동하여 검체체취가 진행된다.</li>
+							<li>검사결과가 음성일 경우에는 자가격리기간 유지(최종 접촉일 기준 14일) 후 격리가 해제되며, 
+								검사결과가 양성일 경우에는 증상의 중증도에 따라 적절한 치료를 받습니다.</li>
+							<li>조사대상 유증상자의 경우도 의사환자와 동일하게 격리공간 또는 독립된 공간으로 이동하여 검체체취가 진행되며, 
+								검사결과가 양성일 경우 증상의 중증도에 따라 적절한 치료를 받습니다. 다만, 검사결과가 음성일 경우에는 보건교육
+								(외출 금지, 대중교통 이용 금지, 가족과 동선 겹치지 않기 등)을 받고 증상발현일 이후 14일까지 보건교육 내용을 준수할
+								 것을 권고 받습니다.</li>
+						</ul>
+					</div><br/>
+				</div>
+				<div data-role="footer">
+					<a href="#" data-rel="back" data-direction="reverse">이전</a>
+				</div>
+			</div>
+			
+			<!-- page5 -->
+			<div data-role="page" id="page5" >
+				<div data-role="header" >
+					<h1>올바른 마스크 사용법</h1>
+				</div>
+				<div data-role="content" >
+					<div class="ui-bar ui-bar-a">검사 방법</div><br/>
+					<div class="ui-body ui-body-a">
+						<h3>선별진료소 방문 및 검사</h3>
+						<ul>
+							<li>의사환자일 경우, 선별진료소(보건소 또는 의료기관)의 격리공간 또는 독립된 공간으로 이동하여 검체체취가 진행된다.</li>
+							<li>검사결과가 음성일 경우에는 자가격리기간 유지(최종 접촉일 기준 14일) 후 격리가 해제되며, 
+								검사결과가 양성일 경우에는 증상의 중증도에 따라 적절한 치료를 받습니다.</li>
+							<li>조사대상 유증상자의 경우도 의사환자와 동일하게 격리공간 또는 독립된 공간으로 이동하여 검체체취가 진행되며, 
+								검사결과가 양성일 경우 증상의 중증도에 따라 적절한 치료를 받습니다. 다만, 검사결과가 음성일 경우에는 보건교육
+								(외출 금지, 대중교통 이용 금지, 가족과 동선 겹치지 않기 등)을 받고 증상발현일 이후 14일까지 보건교육 내용을 준수할
+								 것을 권고 받습니다.</li>
+						</ul>
+					</div><br/>
+				</div>
+				<div data-role="footer">
+					<a href="#" data-rel="back" data-direction="reverse">이전</a>
+				</div>
+			</div>
+			
+		<!-- 전세계 감염 현황 -->
+		<div data-role="page" id="worldCovid19">
+			<div data-role="header" data-position="fixed">
+				<a href="#" data-icon="arrow-l" data-rel="back" data-direction="reverse">이전</a>	
+				<h1>코로나19 세계 확진자 현황</h1>
+			</div>
+			<div>
+				<h4>검색 범위:</h4>
+				<input type="date" id="startDate" value="2019-12-01" min="2019-12-01" />
+				<input type="date" id="endDate" min="2020-01-01" />
+				
+			</div>
+			<select id="country">
+				<option value="#">선택해주세요</option>
+				<!-- 국가 리스트 -->
+			</select>
+		<div id="chart1" style="height: 400px; width: 80%;">
+			<!-- 차트영역 -->
+		</div>
+			<div data-role="footer" data-position="fixed">
+				<h4>COVID-19 Information</h4>
+			</div>
+		</div>
+	</body>
+</html>
